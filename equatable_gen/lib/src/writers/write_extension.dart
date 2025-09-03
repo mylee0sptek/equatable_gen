@@ -17,7 +17,37 @@ Extension writeExtension(EquatableElement element) {
       ..on = refer(element.name)
       ..methods.add(
         Method(
-              (b) => b
+          (b) => b
+            ..name = 'copyWith'
+            ..returns = refer(element.name)
+            ..optionalParameters.addAll(
+              element.props.map(
+                (field) => Parameter(
+                  (b) => b
+                    ..name = field.name
+                    ..named = true
+                    ..type = refer(
+                      field.type.getDisplayString(withNullability: false).replaceAll('?', '') + '?',
+                    ),
+                ),
+              ),
+            )
+            ..body = refer(element.name).newInstance(
+              [],
+              Map.fromEntries(
+                element.props.map(
+                  (field) => MapEntry(
+                    field.name,
+                    refer(field.name).ifNullThen(refer('this.${field.name}')),
+                  ),
+                ),
+              ),
+            ).code,
+        ),
+      )
+      ..methods.add(
+        Method(
+          (b) => b
             ..name = 'scale'
             ..returns = refer(element.name)
             ..body = refer(element.name).newInstance([], Map.fromEntries(element.props.map((field) {
@@ -34,16 +64,20 @@ Extension writeExtension(EquatableElement element) {
                   mapFunctionName = 'ScreenUtil().diameter';
                 } else if (lowerName.endsWith('_sp')) {
                   mapFunctionName = 'ScreenUtil().setSp';
+                } else if (lowerName.endsWith('_dp')) {
+                  mapFunctionName = '';
                 }
-                final mapFunction = refer(mapFunctionName);
-                if (field.type.nullabilitySuffix != NullabilitySuffix.question) {
-                  return MapEntry(field.name, mapFunction.call([refer(field.name)]));
-                } else {
-                  return MapEntry(
-                      field.name,
-                      refer(field.name)
-                          .equalTo(literalNull)
-                          .conditional(literalNull, mapFunction.call([refer(field.name).nullChecked])));
+                if (mapFunctionName.isNotEmpty) {
+                  final mapFunction = refer(mapFunctionName);
+                  if (field.type.nullabilitySuffix != NullabilitySuffix.question) {
+                    return MapEntry(field.name, mapFunction.call([refer(field.name)]));
+                  } else {
+                    return MapEntry(
+                        field.name,
+                        refer(field.name)
+                            .equalTo(literalNull)
+                            .conditional(literalNull, mapFunction.call([refer(field.name).nullChecked])));
+                  }
                 }
               }
               return MapEntry(field.name, refer(field.name));
