@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:change_case/change_case.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:equatable_gen/src/models/equatable_element.dart';
@@ -14,6 +15,41 @@ Extension writeExtension(EquatableElement element) {
     (b) => b
       ..name = '_\$${sanitizedName}EquatableAnnotations'
       ..on = refer(element.name)
+      ..methods.add(
+        Method(
+              (b) => b
+            ..name = 'scale'
+            ..returns = refer(element.name)
+            ..body = refer(element.name).newInstance([], Map.fromEntries(element.props.map((field) {
+              if (field.type.isDartCoreDouble) {
+                final lowerName = field.name.toLowerCase();
+                var mapFunctionName = 'ScreenUtil().radius';
+                if (lowerName.endsWith('_w')) {
+                  mapFunctionName = 'ScreenUtil().setWidth';
+                } else if (lowerName.endsWith('_h')) {
+                  mapFunctionName = 'ScreenUtil().setHeight';
+                } else if (lowerName.endsWith('_r')) {
+                  mapFunctionName = 'ScreenUtil().radius';
+                } else if (lowerName.endsWith('_d')) {
+                  mapFunctionName = 'ScreenUtil().diameter';
+                } else if (lowerName.endsWith('_sp')) {
+                  mapFunctionName = 'ScreenUtil().setSp';
+                }
+                final mapFunction = refer(mapFunctionName);
+                if (field.type.nullabilitySuffix != NullabilitySuffix.question) {
+                  return MapEntry(field.name, mapFunction.call([refer(field.name)]));
+                } else {
+                  return MapEntry(
+                      field.name,
+                      refer(field.name)
+                          .equalTo(literalNull)
+                          .conditional(literalNull, mapFunction.call([refer(field.name).nullChecked])));
+                }
+              }
+              return MapEntry(field.name, refer(field.name));
+            }))).code,
+        ),
+      )
       ..methods.add(
         Method(
           (b) => b
