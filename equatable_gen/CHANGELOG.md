@@ -1,3 +1,11 @@
+## 1.1.0 | 9.9.25
+
+### Enhancements
+
+- Migrate to `Element2` API
+- Update dependencies
+  - Thanks [@techous](https://github.com/techous) for the contribution! 🎉
+
 ## 1.0.4 | 4.24.25
 
 ### Enhancements
