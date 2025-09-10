@@ -37,31 +37,31 @@ test:
 publish:
   (bail):
   (command):
-    - "{$test:gen}"
-    - "{$test:e2e}"
-    - "{$format}"
-    - "{$analyze}"
+    # - "{$test:gen}"
+    # - "{$test:e2e}"
+    # - "{$format}"
+    # - "{$analyze}"
     - |
-      # Update pubspec versions
-      DIR=equatable_gen
-      {$publish:pubspec}
+      # # Update pubspec versions
+      # DIR=equatable_gen
+      # {$publish:pubspec}
 
       DIR=equatable_annotations
       {$publish:pubspec}
 
     - |
-      # Publishing to pub.dev
-      DIR=equatable_gen
-      {$publish:_to-pub}
+      # # Publishing to pub.dev
+      # DIR=equatable_gen
+      # {$publish:_to-pub}
 
       DIR=equatable_annotations
       {$publish:_to-pub}
 
     - "{$publish:_commit}"
     - |
-      # Tagging and pushing to origin
-      DIR=equatable_gen
-      {$publish:tag}
+      # # Tagging and pushing to origin
+      # DIR=equatable_gen
+      # {$publish:tag}
 
       DIR=equatable_annotations
       {$publish:tag}
