@@ -1,3 +1,9 @@
+## 1.1.1 | 9.11.25
+
+### Enhancements
+
+- Update dependencies
+
 ## 1.0.1 | 4.24.25
 
 ### Enhancements
