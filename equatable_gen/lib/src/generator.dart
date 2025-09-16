@@ -28,7 +28,8 @@ final class EquatableGenerator extends Generator {
 
     final generated = writeFile(visitor.nodes);
 
-    final output = generated.map((e) => e.accept(emitter)).join('\n');
+    final rawOutput = generated.map((e) => e.accept(emitter)).join('\n');
+    final output = '$rawOutput\n\n// ignore_for_file: non_constant_identifier_names\n';
 
     return DartFormatter(
       languageVersion: DartFormatter.latestLanguageVersion,
