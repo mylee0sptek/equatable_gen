@@ -1,3 +1,11 @@
+## 1.2.0 | 9.18.25
+
+### Enhancements
+
+- Update dart sdk to 3.7.0
+- Update dependencies
+  - A big thank you to [@techouse](https://github.com/techouse) for their hard work! 🎉
+
 ## 1.1.1 | 9.11.25
 
 ### Enhancements

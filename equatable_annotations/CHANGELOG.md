@@ -1,3 +1,9 @@
+## 1.2.0 | 9.18.25
+
+### Enhancements
+
+- Update dart sdk to 3.7.0
+
 ## 1.1.1 | 9.11.25
 
 ### Enhancements
