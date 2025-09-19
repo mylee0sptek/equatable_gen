@@ -30,10 +30,9 @@ final class EquatableGenerator extends Generator {
 
     final generated = writeFile(visitor.nodes);
 
-    final output = generated.map((e) => e.accept(emitter)).join('\n');
+    final rawOutput = generated.map((e) => e.accept(emitter)).join('\n');
+    final output = ignoreForFile(rawOutput);
 
-    return DartFormatter(
-      languageVersion: DartFormatter.latestLanguageVersion,
-    ).format(output);
+    return DartFormatter(languageVersion: DartFormatter.latestLanguageVersion).format(output);
   }
 }

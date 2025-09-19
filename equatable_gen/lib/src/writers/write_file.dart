@@ -7,3 +7,12 @@ List<Spec> writeFile(List<EquatableElement> equatables) {
 
   return [...extensions];
 }
+
+String ignoreForFile(String output) {
+  if (output.isEmpty) {
+    return output;
+  }
+  final ignoreList = ['non_constant_identifier_names', 'unused_element'];
+  final ignore = ignoreList.join(',');
+  return '// ignore_for_file: $ignore\n\n$output';
+}
